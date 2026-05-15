@@ -1,8 +1,4 @@
 SHELL := /usr/bin/env bash
-PATH := /Users/rdegges/.asdf/installs/golang/1.25.10/go/bin:/tmp/gopath-1.25.10/bin:$(PATH)
-export GOROOT := /Users/rdegges/.asdf/installs/golang/1.25.10/go
-export GOCACHE := /tmp/gocache-1.25.10
-export GOPATH := /tmp/gopath-1.25.10
 
 VERSION ?= 0.0.0-dev
 COMMIT  ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo unknown)
