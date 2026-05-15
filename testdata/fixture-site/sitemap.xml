@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>%HOST%/products/sast.html</loc></url>
+  <url><loc>%HOST%/products/container.html</loc></url>
+  <url><loc>%HOST%/products/retired.html</loc></url>
+  <url><loc>%HOST%/blog/post-1.html</loc></url>
+</urlset>

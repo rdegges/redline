@@ -1,0 +1,125 @@
+version: 2
+
+project_name: redline
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: redline
+    main: ./cmd/redline
+    binary: redline
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+      - -X github.com/rdegges/redline/internal/version.Version={{.Version}}
+      - -X github.com/rdegges/redline/internal/version.Commit={{.ShortCommit}}
+      - -X github.com/rdegges/redline/internal/version.Date={{.Date}}
+
+archives:
+  - id: redline
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+    format_overrides:
+      - goos: windows
+        formats: ["zip"]
+    files:
+      - README.md
+      - LICENSE
+      - CHANGELOG.md
+      - SECURITY.md
+      - CONTRIBUTING.md
+
+checksum:
+  name_template: "checksums.txt"
+  algorithm: sha256
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - "^chore\\(deps\\):"
+      - "^chore\\(ci\\):"
+      - "^Merge pull request"
+      - "^Merge branch"
+  groups:
+    - title: Features
+      regexp: "^.*feat[(\\w)]*:+.*$"
+      order: 0
+    - title: Bug fixes
+      regexp: "^.*fix[(\\w)]*:+.*$"
+      order: 1
+    - title: Documentation
+      regexp: "^.*docs[(\\w)]*:+.*$"
+      order: 2
+    - title: Other
+      order: 999
+
+release:
+  github:
+    owner: rdegges
+    name: redline
+  draft: false
+  prerelease: auto
+  mode: replace
+  header: |
+    ## redline {{ .Tag }}
+
+    Install via Homebrew:
+    ```bash
+    brew install rdegges/tap/redline
+    ```
+
+    Install via `go install`:
+    ```bash
+    go install github.com/rdegges/redline/cmd/redline@{{ .Tag }}
+    ```
+
+    Or download a pre-built binary below.
+  footer: |
+    ---
+
+    Full changelog: https://github.com/rdegges/redline/compare/{{ .PreviousTag }}...{{ .Tag }}
+
+brews:
+  - name: redline
+    repository:
+      owner: rdegges
+      name: homebrew-tap
+      branch: main
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    directory: Formula
+    homepage: "https://github.com/rdegges/redline"
+    description: "Audit your website content against canonical messaging + GEO target prompts. Emits an agent-actionable edit plan."
+    license: "MIT"
+    commit_author:
+      name: redline-release-bot
+      email: noreply@redline.dev
+    commit_msg_template: "chore(redline): release {{ .Tag }}"
+    test: |
+      system "#{bin}/redline", "version"
+    install: |
+      bin.install "redline"

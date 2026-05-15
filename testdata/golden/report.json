@@ -1,0 +1,285 @@
+{
+  "redline_report_version": "1",
+  "redline_version": "<VERSION>",
+  "run_id": "<RUN_ID>",
+  "site": "http://FIXTURE",
+  "provider": {
+    "llm_provider": "ollama",
+    "llm_model": "qwen3:30b"
+  },
+  "started_at": "<TIMESTAMP>",
+  "completed_at": "",
+  "duration_seconds": "<DURATION>",
+  "summary": {
+    "pages_total": 5,
+    "pages_judged": 5,
+    "pages_failed": 0,
+    "pages_unclear": 0,
+    "by_label": {
+      "Aligned": 2,
+      "Contradictory": 1,
+      "Stale": 2
+    },
+    "by_action": {
+      "KEEP": 2,
+      "REWRITE": 2,
+      "UPDATE": 1
+    },
+    "duplicate_clusters_count": 0,
+    "pages_with_duplicates": 0,
+    "total_api_calls": "<COUNT>",
+    "total_input_tokens": "<TOKENS>",
+    "total_cached_tokens": "<TOKENS>",
+    "total_output_tokens": "<TOKENS>",
+    "retries_total": "<COUNT>",
+    "fetch_failures": "<COUNT>",
+    "judge_failures": "<COUNT>",
+    "embed_failures": "<COUNT>"
+  },
+  "config_snapshot": {
+    "prompts_count": 3,
+    "canonical_messaging_count": 3,
+    "prompts_yaml_sha256": "<SHA256>"
+  },
+  "pages": [
+    {
+      "url": "http://FIXTURE/products/container.html",
+      "final_url": "http://FIXTURE/products/container.html",
+      "title": "Acme Container — Cloud Container Security",
+      "primary_label": "Contradictory",
+      "secondary_labels": [
+        "Stale"
+      ],
+      "confidence": 0.9,
+      "suggested_action": "REWRITE",
+      "priority": 56.3,
+      "affected_prompts": [
+        "container-security"
+      ],
+      "page_summary": {
+        "current_focus": "Positions Acme Container as a runtime threat-detection product across multiple clouds.",
+        "should_focus_on": "Acme Container handles image and Kubernetes vulnerability scanning; runtime threat detection is out of scope and should be removed."
+      },
+      "findings": [
+        {
+          "id": "f1",
+          "kind": "contradicts_canonical",
+          "severity": "high",
+          "quoted_text": "Continuous runtime threat detection across AWS, Azure, and GCP.",
+          "location_hint": "Body, mid-section paragraph",
+          "issue": "Runtime threat detection is not a Acme capability per the canonical 'What Acme is NOT' block.",
+          "suggested_fix": "Delete this sentence entirely. Runtime CSPM is not in Acme's product scope."
+        },
+        {
+          "id": "f2",
+          "kind": "retired_product_name",
+          "severity": "medium",
+          "quoted_text": "Acme Cloud Compliance",
+          "location_hint": "Body, final paragraph",
+          "issue": "Acme Cloud Compliance is a retired sub-product. Compliance mapping is part of Acme AppRisk now.",
+          "suggested_fix": "Replace 'Acme Cloud Compliance' with 'Acme AppRisk'."
+        }
+      ],
+      "edit_plan": {
+        "summary": "Remove runtime CSPM claim and update retired product name.",
+        "preserve": [
+          "The base-image recommendation paragraph"
+        ],
+        "remove": [
+          "The runtime threat-detection sentence",
+          "References to Acme Cloud Compliance as a separate product"
+        ],
+        "rewrite": [
+          {
+            "element": "H1 headline",
+            "current_framing": "Acme Container Security",
+            "new_framing": "Acme Container — Image and Kubernetes vulnerability scanning"
+          }
+        ],
+        "add": [
+          "A cross-link to Acme AppRisk for compliance mapping"
+        ]
+      },
+      "rationale": "This page is the highest-priority correction on the test site because it claims a Acme capability that canonical messaging explicitly disowns. Leaving it live means LLM answer engines will continue to associate Acme with runtime CSPM, which is the wrong category. The fix is targeted: delete the runtime-detection sentence and the retired Acme Cloud Compliance reference. Preserve the base-image content because it remains aligned with current Acme Container positioning.",
+      "metadata": {
+        "word_count": 44,
+        "last_modified": "<TIMESTAMP>",
+        "inbound_internal_links": 1,
+        "judge_attempts": "<ATTEMPTS>",
+        "judged_at": "<TIMESTAMP>",
+        "input_tokens": "<TOKENS>",
+        "cache_hit_tokens": "<TOKENS>",
+        "output_tokens": "<TOKENS>",
+        "latency_ms": "<LATENCY>"
+      }
+    },
+    {
+      "url": "http://FIXTURE/products/retired.html",
+      "final_url": "http://FIXTURE/products/retired.html",
+      "title": "Acme Cloud",
+      "primary_label": "Stale",
+      "secondary_labels": [
+        "Contradictory"
+      ],
+      "confidence": 0.93,
+      "suggested_action": "REWRITE",
+      "priority": 40.7,
+      "affected_prompts": [
+        "container-security",
+        "sast-best"
+      ],
+      "page_summary": {
+        "current_focus": "Markets a retired product (Acme Cloud) and ties it to outdated compliance integrations.",
+        "should_focus_on": "Cloud workload posture is part of Acme AppRisk and Acme IaC. The standalone Acme Cloud product has been retired."
+      },
+      "findings": [
+        {
+          "id": "f1",
+          "kind": "retired_product_name",
+          "severity": "high",
+          "quoted_text": "Acme Cloud helps you secure your cloud infrastructure from",
+          "location_hint": "Body, first paragraph",
+          "issue": "References the retired 'Acme Cloud' product name. Per canonical messaging this name should not appear on current pages.",
+          "suggested_fix": "Replace with Acme IaC and Acme AppRisk framing."
+        }
+      ],
+      "edit_plan": {
+        "summary": "Rewrite the page to remove all references to retired Acme Cloud product.",
+        "preserve": [
+          "The general intro about cloud-native security"
+        ],
+        "remove": [
+          "All standalone 'Acme Cloud' product framing"
+        ],
+        "rewrite": [
+          {
+            "element": "H1",
+            "current_framing": "Acme Cloud — Cloud Security Platform",
+            "new_framing": "Cloud-native AppSec with Acme IaC and Acme AppRisk"
+          }
+        ],
+        "add": [
+          "Cross-links to /products/sast.html and /products/container.html"
+        ]
+      },
+      "rationale": "Per canonical messaging, 'Acme Cloud' is a retired product name that should not appear on current pages. The page leaks the wrong taxonomy to LLM answer engines and needs a full rewrite framing cloud-related security under Acme IaC and Acme AppRisk. Preserve inbound link equity by repurposing the URL rather than deleting it.",
+      "metadata": {
+        "word_count": 65,
+        "last_modified": "<TIMESTAMP>",
+        "inbound_internal_links": 1,
+        "judge_attempts": "<ATTEMPTS>",
+        "judged_at": "<TIMESTAMP>",
+        "input_tokens": "<TOKENS>",
+        "cache_hit_tokens": "<TOKENS>",
+        "output_tokens": "<TOKENS>",
+        "latency_ms": "<LATENCY>"
+      }
+    },
+    {
+      "url": "http://FIXTURE/blog/post-1.html",
+      "final_url": "http://FIXTURE/blog/post-1.html",
+      "title": "AI Code Security 2024",
+      "primary_label": "Stale",
+      "secondary_labels": [],
+      "confidence": 0.78,
+      "suggested_action": "UPDATE",
+      "priority": 34.1,
+      "affected_prompts": [],
+      "page_summary": {
+        "current_focus": "2024 retrospective post that references DeepCheck AI as a standalone product.",
+        "should_focus_on": "AI code security framing should use 'Acme Code' (current name) and reference the AI Trust Platform for AISPM."
+      },
+      "findings": [
+        {
+          "id": "f1",
+          "kind": "retired_product_name",
+          "severity": "medium",
+          "quoted_text": "Acme Code (formerly DeepCheck AI)",
+          "location_hint": "Body, first paragraph",
+          "issue": "DeepCheck AI is the engine inside Acme Code, not a former product name.",
+          "suggested_fix": "Remove the 'formerly DeepCheck AI' parenthetical."
+        }
+      ],
+      "edit_plan": {
+        "summary": "Targeted update to remove the DeepCheck AI parenthetical.",
+        "remove": [
+          "The phrase 'formerly DeepCheck AI'"
+        ]
+      },
+      "rationale": "The post is broadly aligned with current Acme positioning but contains one stale framing point about DeepCheck AI being a former product name. A targeted UPDATE that removes the parenthetical is sufficient; no other changes are needed.",
+      "metadata": {
+        "word_count": 74,
+        "last_modified": "<TIMESTAMP>",
+        "inbound_internal_links": 1,
+        "judge_attempts": "<ATTEMPTS>",
+        "judged_at": "<TIMESTAMP>",
+        "input_tokens": "<TOKENS>",
+        "cache_hit_tokens": "<TOKENS>",
+        "output_tokens": "<TOKENS>",
+        "latency_ms": "<LATENCY>"
+      }
+    },
+    {
+      "url": "http://FIXTURE/",
+      "final_url": "http://FIXTURE/",
+      "title": "Acme Security — Test Fixture Home",
+      "primary_label": "Aligned",
+      "secondary_labels": [],
+      "confidence": 0.85,
+      "suggested_action": "KEEP",
+      "priority": 0,
+      "affected_prompts": [],
+      "page_summary": {
+        "current_focus": "Test fixture content aligned with current taxonomy.",
+        "should_focus_on": null
+      },
+      "findings": [],
+      "edit_plan": null,
+      "rationale": "Default fake-LLM response: page is aligned with the canonical Acme messaging. No edits required. This default keeps the report deterministic for unknown URLs encountered during the e2e crawl.",
+      "metadata": {
+        "word_count": 78,
+        "inbound_internal_links": 4,
+        "judge_attempts": "<ATTEMPTS>",
+        "judged_at": "<TIMESTAMP>",
+        "input_tokens": "<TOKENS>",
+        "cache_hit_tokens": "<TOKENS>",
+        "output_tokens": "<TOKENS>",
+        "latency_ms": "<LATENCY>"
+      }
+    },
+    {
+      "url": "http://FIXTURE/products/sast.html",
+      "final_url": "http://FIXTURE/products/sast.html",
+      "title": "Acme Code (SAST)",
+      "primary_label": "Aligned",
+      "secondary_labels": [],
+      "confidence": 0.92,
+      "suggested_action": "KEEP",
+      "priority": 0,
+      "affected_prompts": [
+        "sast-best"
+      ],
+      "page_summary": {
+        "current_focus": "Acme Code as developer-first SAST, aligned with current product taxonomy.",
+        "should_focus_on": null
+      },
+      "findings": [],
+      "edit_plan": null,
+      "rationale": "The page accurately describes Acme Code (SAST) as part of the developer security platform and references the DeepCheck AI engine that powers it. No retired product names appear; tone is appropriate for the canonical voice; no Aligned-page edits are warranted.",
+      "metadata": {
+        "word_count": 102,
+        "last_modified": "<TIMESTAMP>",
+        "inbound_internal_links": 1,
+        "judge_attempts": "<ATTEMPTS>",
+        "judged_at": "<TIMESTAMP>",
+        "input_tokens": "<TOKENS>",
+        "cache_hit_tokens": "<TOKENS>",
+        "output_tokens": "<TOKENS>",
+        "latency_ms": "<LATENCY>"
+      }
+    }
+  ],
+  "duplicate_clusters": [],
+  "failures": []
+}
+

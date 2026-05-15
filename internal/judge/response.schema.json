@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["primary_label", "confidence", "suggested_action", "page_summary", "findings", "rationale"],
+  "additionalProperties": false,
+  "properties": {
+    "primary_label": {
+      "enum": ["Aligned", "Stale", "OffBrand", "Contradictory", "Redundant", "Thin", "Zombie", "Unclear"]
+    },
+    "secondary_labels": {
+      "type": "array",
+      "items": {"enum": ["Aligned", "Stale", "OffBrand", "Contradictory", "Redundant", "Thin", "Zombie", "Unclear"]}
+    },
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "affected_prompts": {"type": "array", "items": {"type": "string"}},
+    "suggested_action": {"enum": ["KEEP", "UPDATE", "REWRITE", "DELETE", "MANUAL_REVIEW"]},
+    "page_summary": {
+      "type": "object",
+      "required": ["current_focus"],
+      "additionalProperties": false,
+      "properties": {
+        "current_focus": {"type": "string", "maxLength": 400},
+        "should_focus_on": {"type": ["string", "null"], "maxLength": 400}
+      }
+    },
+    "findings": {
+      "type": "array", "maxItems": 15,
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "severity", "quoted_text", "location_hint", "issue", "suggested_fix"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string", "pattern": "^f[0-9]+$"},
+          "kind": {"enum": [
+            "retired_product_name", "unsupported_claim", "contradicts_canonical",
+            "off_brand_tone", "outdated_feature", "outdated_pricing", "thin_content",
+            "boilerplate_only", "redundant_with_other_page", "dead_external_reference",
+            "factual_error", "missing_canonical_message", "other"
+          ]},
+          "severity": {"enum": ["high", "medium", "low"]},
+          "quoted_text": {"type": "string", "minLength": 1, "maxLength": 500},
+          "location_hint": {"type": "string", "maxLength": 200},
+          "issue": {"type": "string", "maxLength": 600},
+          "suggested_fix": {"type": "string", "maxLength": 800}
+        }
+      }
+    },
+    "edit_plan": {
+      "type": ["object", "null"],
+      "required": ["summary"],
+      "additionalProperties": false,
+      "properties": {
+        "summary": {"type": "string", "maxLength": 500},
+        "preserve": {"type": "array", "items": {"type": "string", "maxLength": 200}},
+        "remove": {"type": "array", "items": {"type": "string", "maxLength": 300}},
+        "rewrite": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["element", "current_framing", "new_framing"],
+            "additionalProperties": false,
+            "properties": {
+              "element": {"type": "string", "maxLength": 200},
+              "current_framing": {"type": "string", "maxLength": 500},
+              "new_framing": {"type": "string", "maxLength": 800}
+            }
+          }
+        },
+        "add": {"type": "array", "items": {"type": "string", "maxLength": 300}}
+      }
+    },
+    "rationale": {"type": "string", "minLength": 50, "maxLength": 2500}
+  }
+}

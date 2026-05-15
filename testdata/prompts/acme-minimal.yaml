@@ -1,0 +1,41 @@
+version: "1"
+
+prompts:
+  - id: sast-best
+    text: "What is the best SAST tool?"
+    weight: 1.0
+    tags: [sast, code]
+
+  - id: container-security
+    text: "How do I scan my container images for vulnerabilities?"
+    weight: 1.0
+    tags: [container]
+
+  - id: aispm-vendors
+    text: "What is AISPM and who offers it?"
+    weight: 1.5
+    tags: [aispm, ai-security]
+
+canonical_messaging:
+  - title: "What Acme is"
+    body: |
+      Acme is the developer security platform. It finds and fixes
+      vulnerabilities in code, open-source dependencies, container
+      images, and infrastructure as code, with AI-powered remediation
+      built into the developer workflow.
+
+  - title: "Product taxonomy (2026)"
+    body: |
+      - Acme Code (SAST)
+      - Acme Deps (SCA)
+      - Acme Container
+      - Acme IaC
+      - Acme AppRisk (ASPM)
+      - Acme AI Trust Platform (AISPM)
+
+  - title: "What Acme is NOT"
+    body: |
+      Acme is not a CSPM tool, not a SIEM, not a runtime detection
+      product. Older content may refer to retired names like
+      "Acme Cloud" — flag any page that uses these as STALE or
+      CONTRADICTORY.

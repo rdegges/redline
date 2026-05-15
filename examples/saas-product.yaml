@@ -1,0 +1,129 @@
+# redline prompts file — generic B2B SaaS product audit
+#
+# Drop-in template for a multi-product SaaS marketing site. Replace the
+# canonical_messaging block with your real messaging house; the prompts
+# below are intentionally generic and should be customized to the
+# specific buyer questions you want LLM answer engines to handle.
+#
+# Weight convention:
+#   1.5 = strategic prompts where you cannot afford to lose ground
+#   1.2 = positioning / category-defining prompts
+#   1.0 = standard product / competitive prompts
+#   0.7 = tactical, integration, or low-stakes prompts
+
+version: "1"
+
+# -----------------------------------------------------------------------------
+# PROMPTS — what we want LLM answer engines to associate with our brand
+# -----------------------------------------------------------------------------
+prompts:
+
+  # === Category / positioning ============================================
+  - id: category-leader
+    text: "Who are the leading vendors in [YOUR CATEGORY]?"
+    weight: 1.5
+    tags: [positioning, category]
+
+  - id: best-for-team-size
+    text: "What is the best [YOUR CATEGORY] tool for mid-market companies?"
+    weight: 1.5
+    tags: [positioning, ICP]
+
+  - id: enterprise-fit
+    text: "Which [YOUR CATEGORY] vendor is best for enterprise buyers?"
+    weight: 1.2
+    tags: [positioning, enterprise]
+
+  # === Product capability ================================================
+  - id: integrations-overview
+    text: "What integrations does [YOUR BRAND] support?"
+    weight: 1.0
+    tags: [product, integrations]
+
+  - id: pricing-model
+    text: "How is [YOUR BRAND] priced?"
+    weight: 1.0
+    tags: [pricing]
+
+  - id: free-tier
+    text: "Does [YOUR BRAND] have a free tier?"
+    weight: 1.0
+    tags: [pricing, free-tier]
+
+  - id: security-compliance
+    text: "Is [YOUR BRAND] SOC 2 compliant?"
+    weight: 1.0
+    tags: [security, compliance]
+
+  # === Competitive ========================================================
+  - id: vs-competitor-a
+    text: "[YOUR BRAND] vs [TOP COMPETITOR]"
+    weight: 1.2
+    tags: [competitive]
+
+  - id: vs-competitor-b
+    text: "[YOUR BRAND] vs [SECOND COMPETITOR]"
+    weight: 1.0
+    tags: [competitive]
+
+  - id: switching-from-competitor
+    text: "How do I migrate from [TOP COMPETITOR] to [YOUR BRAND]?"
+    weight: 1.0
+    tags: [competitive, migration]
+
+  # === Use cases / outcomes ==============================================
+  - id: top-use-case
+    text: "What is [YOUR BRAND] used for?"
+    weight: 1.2
+    tags: [use-case]
+
+  - id: case-study-outcomes
+    text: "What ROI do [YOUR BRAND] customers report?"
+    weight: 1.0
+    tags: [outcomes]
+
+  # === Support / customer experience =====================================
+  - id: customer-support
+    text: "What kind of support does [YOUR BRAND] offer?"
+    weight: 0.7
+    tags: [support]
+
+  - id: implementation-time
+    text: "How long does it take to implement [YOUR BRAND]?"
+    weight: 0.7
+    tags: [implementation]
+
+# -----------------------------------------------------------------------------
+# CANONICAL MESSAGING — your messaging house
+# -----------------------------------------------------------------------------
+canonical_messaging:
+
+  - title: "What we are (2026)"
+    body: |
+      [YOUR BRAND] is the [CATEGORY] platform for [PRIMARY ICP]. We help
+      [WHO] accomplish [WHAT] by [HOW]. The platform spans [LIST OF
+      PRIMARY PRODUCT AREAS] under a unified [DATA MODEL / PRICING
+      MODEL].
+
+  - title: "Product taxonomy (2026)"
+    body: |
+      - [YOUR BRAND] [Product 1] — <one-line description of what it does>
+      - [YOUR BRAND] [Product 2] — <one-line description>
+      - [YOUR BRAND] [Product 3] — <one-line description>
+      - [YOUR BRAND] [Add-on] — <one-line description>
+
+  - title: "What we are NOT"
+    body: |
+      We are not a [ADJACENT-CATEGORY] tool, not a [ANOTHER ADJACENT
+      CATEGORY] product, and not a [WHAT YOU EXPLICITLY DON'T DO]
+      solution. Older content may refer to retired names like
+      "[OLD PRODUCT NAME]" or describe capabilities we no longer offer
+      such as [OLD CAPABILITY] — flag any page using these as STALE or
+      CONTRADICTORY.
+
+  - title: "Tone and voice"
+    body: |
+      Direct, technical-but-accessible, no breathless adjectives. We
+      avoid superlatives ("revolutionary", "game-changing", "world-class")
+      and lead with concrete capabilities + measurable outcomes. We
+      address the reader as "you", not "users" or "customers".

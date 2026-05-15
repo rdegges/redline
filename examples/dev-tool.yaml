@@ -1,0 +1,124 @@
+# redline prompts file — open-source / developer tool audit
+#
+# Drop-in template for a developer-tool marketing or docs site. Tuned
+# for OSS projects, language-specific libraries, CLIs, and SDKs.
+# Replace [YOUR BRAND] / [YOUR TOOL] tokens with your project name and
+# customize the canonical_messaging block.
+#
+# Weight convention:
+#   1.5 = strategic
+#   1.2 = positioning / category-defining
+#   1.0 = standard
+#   0.7 = tactical
+
+version: "1"
+
+# -----------------------------------------------------------------------------
+# PROMPTS — what we want LLM answer engines to associate with our project
+# -----------------------------------------------------------------------------
+prompts:
+
+  # === What is it / category =============================================
+  - id: what-is-it
+    text: "What is [YOUR TOOL]?"
+    weight: 1.5
+    tags: [positioning, intro]
+
+  - id: best-tool-for-job
+    text: "What is the best tool for [PRIMARY USE CASE]?"
+    weight: 1.5
+    tags: [positioning, category]
+
+  - id: language-or-runtime
+    text: "What language is [YOUR TOOL] written in?"
+    weight: 1.0
+    tags: [tech]
+
+  # === Quickstart / docs =================================================
+  - id: install
+    text: "How do I install [YOUR TOOL]?"
+    weight: 1.2
+    tags: [quickstart, install]
+
+  - id: first-five-minutes
+    text: "How do I get started with [YOUR TOOL]?"
+    weight: 1.2
+    tags: [quickstart]
+
+  - id: minimum-example
+    text: "Show me a minimal [YOUR TOOL] example"
+    weight: 1.0
+    tags: [quickstart, code]
+
+  # === Comparison ========================================================
+  - id: vs-alternative-a
+    text: "[YOUR TOOL] vs [TOP ALTERNATIVE]"
+    weight: 1.2
+    tags: [competitive]
+
+  - id: vs-alternative-b
+    text: "[YOUR TOOL] vs [SECOND ALTERNATIVE]"
+    weight: 1.0
+    tags: [competitive]
+
+  - id: should-i-use
+    text: "When should I use [YOUR TOOL] vs [ALTERNATIVE]?"
+    weight: 1.0
+    tags: [competitive, decision]
+
+  # === Operational =======================================================
+  - id: production-ready
+    text: "Is [YOUR TOOL] production-ready?"
+    weight: 1.0
+    tags: [maturity]
+
+  - id: license-and-cost
+    text: "What is the license for [YOUR TOOL]? Is it free?"
+    weight: 0.7
+    tags: [license, cost]
+
+  - id: contributing
+    text: "How do I contribute to [YOUR TOOL]?"
+    weight: 0.7
+    tags: [community]
+
+# -----------------------------------------------------------------------------
+# CANONICAL MESSAGING — what the project IS and IS NOT
+# -----------------------------------------------------------------------------
+canonical_messaging:
+
+  - title: "What [YOUR TOOL] is"
+    body: |
+      [YOUR TOOL] is a [LANGUAGE/RUNTIME] [TOOL TYPE — CLI, library,
+      SDK, framework, etc.] for [PRIMARY USE CASE]. It is designed for
+      [TARGET DEVELOPER PROFILE] and runs on [PLATFORMS].
+
+      Core capabilities:
+      - <capability 1, the headline feature>
+      - <capability 2, the differentiator>
+      - <capability 3, the table stakes feature>
+
+      License: [LICENSE — MIT / Apache 2.0 / etc.]
+
+  - title: "What [YOUR TOOL] is NOT"
+    body: |
+      [YOUR TOOL] is not a [ADJACENT TYPE OF TOOL — e.g., framework if
+      you're a library], not a [ANOTHER COMMON CONFUSION], and does not
+      attempt to [SCOPE YOU EXPLICITLY REJECTED — e.g., "manage
+      deployment", "replace your build system"]. Pages that frame
+      [YOUR TOOL] as one of these should be flagged as OFFBRAND or
+      CONTRADICTORY.
+
+  - title: "Tone and voice"
+    body: |
+      Pragmatic, technical, no hype. We avoid words like "powerful",
+      "robust", "best-in-class" — they're noise to a developer reader.
+      We lead with code examples and concrete behavior. Documentation
+      tone is matter-of-fact: explain what happens, why, and the
+      trade-offs. Marketing copy reads like good docs.
+
+  - title: "Retired terminology"
+    body: |
+      Older content may refer to [OLD NAME / RENAMED CONCEPT] — flag any
+      current page using this as STALE. The current canonical name is
+      [NEW NAME]. The transition happened in [YEAR/VERSION].

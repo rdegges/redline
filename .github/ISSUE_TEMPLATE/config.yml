@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or general discussion
+    url: https://github.com/rdegges/redline/discussions
+    about: For questions about how to use redline, design discussions, or sharing how you're using it. Please use Discussions instead of opening an issue.
+  - name: Security vulnerability
+    url: https://github.com/rdegges/redline/security/advisories/new
+    about: Report a vulnerability privately. Do NOT use the public issue tracker for security problems. See SECURITY.md for the full policy.

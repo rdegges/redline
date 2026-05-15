@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "redline prompts.yaml",
+  "type": "object",
+  "required": ["version", "prompts"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string",
+      "enum": ["1"]
+    },
+    "prompts": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": ["id", "text"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9_-]{1,64}$"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10
+          },
+          "tags": {
+            "type": "array",
+            "items": {"type": "string"}
+          }
+        }
+      }
+    },
+    "canonical_messaging": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "required": ["title", "body"],
+        "additionalProperties": false,
+        "properties": {
+          "title": {"type": "string", "minLength": 1, "maxLength": 200},
+          "body":  {"type": "string", "minLength": 1, "maxLength": 20000}
+        }
+      }
+    },
+    "label_overrides": {
+      "type": "object"
+    },
+    "seeds": {
+      "type": "array",
+      "items": {"type": "string", "format": "uri"}
+    }
+  }
+}

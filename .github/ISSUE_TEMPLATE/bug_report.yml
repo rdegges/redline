@@ -1,0 +1,108 @@
+name: Bug report
+description: Something is broken or behaving differently than documented
+title: "[bug] "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report. Please fill out the fields below — structured reports help us reproduce and fix faster than free-form prose.
+
+        **Before filing:** please search [existing issues](https://github.com/rdegges/redline/issues?q=is%3Aissue) to avoid duplicates.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear, concise description of the bug. What did you observe?
+      placeholder: "Running `redline scan` against my-site.com aborted with..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+      description: What you thought would happen instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Minimal steps that reproduce the bug. The smaller the repro the better.
+      placeholder: |
+        1. Author a `prompts.yaml` with...
+        2. Run `redline scan --site ...`
+        3. Observe the error in...
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: command
+    attributes:
+      label: Command(s) run
+      description: Paste the exact `redline` command(s) you ran. Redact secrets.
+      render: shell
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: redline version
+      description: Output of `redline version`. Include the commit hash and Go version.
+      placeholder: "v0.1.0-alpha (abc123) / go1.24"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - macOS
+        - Linux
+        - Windows
+        - Other (specify in additional context)
+    validations:
+      required: true
+
+  - type: input
+    id: ollama-version
+    attributes:
+      label: Ollama version (if applicable)
+      description: Output of `ollama --version`. Skip if you're using a cloud LLM provider.
+      placeholder: "0.5.4"
+
+  - type: textarea
+    id: doctor-output
+    attributes:
+      label: redline doctor output
+      description: Output of `redline doctor`. Helps narrow down environment problems quickly.
+      render: shell
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Paste any error output, panic traces, or unexpected log lines. Set `--log-level=debug` for more detail.
+      render: shell
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Anything else? Screenshots, links to the site being scanned (if public), notes on what you've already tried.
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checks
+      options:
+        - label: I have searched existing issues for duplicates
+          required: true
+        - label: I have removed any secrets, API keys, or sensitive data from the report above
+          required: true

@@ -1,0 +1,11 @@
+bin/
+coverage.out
+coverage.html
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+.DS_Store
+redline-report/
+*.log
+.claude/

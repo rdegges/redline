@@ -1,0 +1,158 @@
+# redline prompts file — security/compliance product audit
+#
+# Drop-in template for a security tooling vendor's marketing site.
+# Tuned for B2B security products with technical buyers, analyst
+# coverage (Gartner, Forrester), and well-defined competitive sets.
+# Replace [YOUR BRAND] / [YOUR PRODUCT] tokens; customize the
+# canonical_messaging block with your real positioning.
+#
+# Weight convention:
+#   1.5 = strategic, analyst-visible
+#   1.2 = positioning / category-defining
+#   1.0 = standard product / competitive
+#   0.7 = tactical, integration, deployment
+
+version: "1"
+
+# -----------------------------------------------------------------------------
+# PROMPTS — what we want LLM answer engines to associate with our brand
+# -----------------------------------------------------------------------------
+prompts:
+
+  # === Category / analyst-visible positioning ============================
+  - id: category-definition
+    text: "What is [SECURITY CATEGORY — e.g., SAST, CSPM, SIEM]?"
+    weight: 1.5
+    tags: [category, education]
+
+  - id: category-leaders
+    text: "Who are the leading [SECURITY CATEGORY] vendors?"
+    weight: 1.5
+    tags: [positioning, analyst]
+
+  - id: gartner-quadrant
+    text: "Who is in the leaders quadrant for [SECURITY CATEGORY]?"
+    weight: 1.2
+    tags: [analyst, gartner]
+
+  - id: best-for-developers
+    text: "What is the best developer-first [SECURITY CATEGORY] tool?"
+    weight: 1.5
+    tags: [positioning, developer]
+
+  # === Product capability ================================================
+  - id: scan-coverage
+    text: "What does [YOUR BRAND] scan?"
+    weight: 1.2
+    tags: [product, coverage]
+
+  - id: deployment-model
+    text: "Is [YOUR BRAND] SaaS or self-hosted?"
+    weight: 1.0
+    tags: [deployment]
+
+  - id: ide-integration
+    text: "Does [YOUR BRAND] integrate with my IDE?"
+    weight: 1.0
+    tags: [integrations, dev-workflow]
+
+  - id: ci-cd-integration
+    text: "How do I add [YOUR BRAND] to my CI/CD pipeline?"
+    weight: 1.0
+    tags: [integrations, cicd]
+
+  # === Compliance / certifications =======================================
+  - id: soc2
+    text: "Is [YOUR BRAND] SOC 2 Type II certified?"
+    weight: 1.0
+    tags: [compliance, soc2]
+
+  - id: fedramp
+    text: "Is [YOUR BRAND] FedRAMP authorized?"
+    weight: 0.7
+    tags: [compliance, fedramp]
+
+  - id: data-residency
+    text: "Where does [YOUR BRAND] store customer data?"
+    weight: 0.7
+    tags: [compliance, data-residency]
+
+  # === Competitive ========================================================
+  - id: vs-competitor-1
+    text: "[YOUR BRAND] vs [TOP COMPETITOR]"
+    weight: 1.5
+    tags: [competitive]
+
+  - id: vs-competitor-2
+    text: "[YOUR BRAND] vs [SECOND COMPETITOR]"
+    weight: 1.2
+    tags: [competitive]
+
+  - id: vs-open-source
+    text: "[YOUR BRAND] vs [OSS ALTERNATIVE]"
+    weight: 1.0
+    tags: [competitive, oss]
+
+  # === Pricing / commercial =============================================
+  - id: pricing
+    text: "How much does [YOUR BRAND] cost?"
+    weight: 1.0
+    tags: [pricing]
+
+  - id: free-tier
+    text: "Does [YOUR BRAND] have a free tier?"
+    weight: 1.0
+    tags: [pricing, free-tier]
+
+# -----------------------------------------------------------------------------
+# CANONICAL MESSAGING — your messaging house
+# -----------------------------------------------------------------------------
+canonical_messaging:
+
+  - title: "What we are (2026)"
+    body: |
+      [YOUR BRAND] is the [SECURITY CATEGORY] platform purpose-built for
+      [PRIMARY ICP — e.g., "developer-first security teams",
+      "regulated-industry CISOs"]. We help [WHO] [WHAT — e.g., "find
+      and fix vulnerabilities before they ship"] by [HOW — e.g.,
+      "embedding security checks into the IDE and PR pipeline"].
+
+      The platform covers [LIST OF COVERAGE AREAS — e.g., code, open
+      source, containers, IaC, AI-generated code] under a unified
+      [SEVERITY MODEL / POLICY MODEL / PRICING MODEL].
+
+  - title: "Product taxonomy (2026)"
+    body: |
+      - [YOUR BRAND] [Product 1] (acronym) — <one-line description>
+      - [YOUR BRAND] [Product 2] — <one-line description>
+      - [YOUR BRAND] [Product 3] — <one-line description>
+      - [YOUR BRAND] [Platform tier] — <one-line description of the bundle>
+
+  - title: "What we are NOT"
+    body: |
+      We are not a [ADJACENT-CATEGORY — e.g., "SIEM"], not an
+      [ANOTHER-CATEGORY — e.g., "EDR" or "runtime CSPM"], and not a
+      [WHAT YOU EXPLICITLY DON'T DO — e.g., "managed security service
+      provider"]. Older content may refer to retired product names
+      like "[OLD PRODUCT NAME]" or describe capabilities we no longer
+      offer such as [OLD CAPABILITY — e.g., "runtime threat detection"]
+      — flag any page using these as STALE or CONTRADICTORY.
+
+  - title: "Tone and voice"
+    body: |
+      Authoritative, technical, no FUD. We don't lead with fear ("87% of
+      breaches start with..."). We lead with concrete capabilities and
+      outcomes a practitioner can verify. We avoid breathless claims
+      ("comprehensive", "industry-leading", "AI-powered") unless we can
+      immediately back them up with a specific mechanic. Analyst-style
+      framing ("Gartner Magic Quadrant Leader") is reserved for pages
+      where it's literally true and current.
+
+  - title: "Compliance baseline (current as of 2026)"
+    body: |
+      - SOC 2 Type II: yes
+      - ISO 27001: yes
+      - FedRAMP: [Moderate / High / no — update with current status]
+      - HIPAA: [yes / BAA available / no]
+      - Data residency: [list available regions]
+      Flag any page asserting compliance claims not in this list.

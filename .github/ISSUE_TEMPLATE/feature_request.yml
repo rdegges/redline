@@ -1,0 +1,56 @@
+name: Feature request
+description: Suggest a new capability or improvement
+title: "[feature] "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for thinking about how to make `redline` better. Please describe the use case before proposing an implementation — the use case is usually more useful than the proposed mechanic.
+
+        **Before filing:** please search [existing issues](https://github.com/rdegges/redline/issues?q=is%3Aissue) — your idea may already be tracked.
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: What are you trying to do?
+      description: Describe the real-world problem you're trying to solve with this feature. What would you do with it once it shipped?
+      placeholder: "I'm trying to audit a multi-language site and..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-workaround
+    attributes:
+      label: How are you working around this today?
+      description: What does the current flow look like? What's missing or painful about it?
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution (optional)
+      description: If you have a specific design in mind, sketch it here. Don't worry if you don't — describing the use case is more important than picking the implementation.
+      placeholder: "Add a `--language` flag that..."
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you've thought about, and why this one would be better.
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: How urgent is this for you?
+      options:
+        - Nice to have — I'm exploring ideas
+        - Would help me ship something
+        - Blocking my use of redline today
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Links, examples from other tools, prior art, anything else.
