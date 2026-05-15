@@ -227,7 +227,7 @@ For a deeper dive — package layout, lifecycle of a scan, load-bearing design d
 - `ollama unavailable` / connection refused → Start Ollama: `ollama serve`.
 - `ollama model not pulled` → `ollama pull qwen3:30b` and `ollama pull nomic-embed-text`.
 - `Configured prompts.yaml didn't validate` → `redline scan --print-schema` shows the embedded JSON Schema.
-- A run aborted mid-scan? Inspect what stage it stopped at with `redline doctor --run latest` — it will summarize counts and suggest the right resume command. Re-running `redline scan` with the same `--db` path picks up where it left off automatically.
+- A run aborted mid-scan? Inspect what stage it stopped at with `redline doctor --run latest` — it summarizes counts and suggests the right resume command. Re-running `redline scan` with the same `--db` path picks up where it left off automatically. Add `--json` for scriptable NDJSON output: the per-check lines are followed by a single `{"kind":"run_inspection",...}` record covering the run's state.
 
 ## Contributing
 

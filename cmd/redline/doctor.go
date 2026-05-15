@@ -47,7 +47,9 @@ func doctorRun(c *cobra.Command) error {
 			ctx = context.Background()
 		}
 		ins, err := inspectRun(ctx, global.DB, runArg)
-		if err != nil {
+		if asJSON {
+			writeRunInspectionJSON(c.OutOrStdout(), ins, err)
+		} else if err != nil {
 			fmt.Fprintln(c.OutOrStdout(), "-----------------------------------------")
 			fmt.Fprintf(c.OutOrStdout(), "Run inspection failed: %v\n", err)
 		} else {

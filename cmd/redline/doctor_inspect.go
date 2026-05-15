@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"strings"
@@ -162,6 +163,76 @@ func writeRunInspection(out io.Writer, ins *runInspection) {
 	for _, line := range strings.Split(ins.NextActionMessage, "\n") {
 		fmt.Fprintf(out, "  %s\n", line)
 	}
+}
+
+// runInspectionJSON is the wire format emitted by `doctor --json --run`.
+// One NDJSON line, alongside the per-check lines from writeDoctorJSON.
+type runInspectionJSON struct {
+	Kind                   string         `json:"kind"`
+	Error                  string         `json:"error,omitempty"`
+	Message                string         `json:"message,omitempty"`
+	RunID                  string         `json:"run_id,omitempty"`
+	Site                   string         `json:"site,omitempty"`
+	Status                 string         `json:"status,omitempty"`
+	StartedAt              string         `json:"started_at,omitempty"`
+	LastHeartbeatAt        string         `json:"last_heartbeat_at,omitempty"`
+	CompletedAt            string         `json:"completed_at,omitempty"`
+	LLMProvider            string         `json:"llm_provider,omitempty"`
+	LLMModel               string         `json:"llm_model,omitempty"`
+	URLsByStatus           map[string]int `json:"urls_by_status,omitempty"`
+	ClassificationsByLabel map[string]int `json:"classifications_by_label,omitempty"`
+	APICalls               int            `json:"api_calls,omitempty"`
+	Retries                int            `json:"retries,omitempty"`
+	SuggestedAction        string         `json:"suggested_action,omitempty"`
+}
+
+// writeRunInspectionJSON serializes a runInspection as a single NDJSON
+// line. inspectErr is the error returned by inspectRun (if any), so
+// callers can pass through the original failure without re-wrapping.
+func writeRunInspectionJSON(out io.Writer, ins *runInspection, inspectErr error) {
+	rec := runInspectionJSON{Kind: "run_inspection"}
+	switch {
+	case inspectErr != nil:
+		rec.Error = inspectErr.Error()
+	case ins == nil || ins.Run == nil:
+		if ins != nil {
+			rec.Message = ins.NextActionMessage
+		} else {
+			rec.Message = "No run inspection available."
+		}
+	default:
+		r := ins.Run
+		rec.RunID = r.ID
+		rec.Site = r.SiteURL
+		rec.Status = r.Status
+		rec.StartedAt = formatRFC3339(r.StartedAt)
+		rec.LastHeartbeatAt = formatRFC3339(r.LastHeartbeatAt)
+		if r.CompletedAt.Valid {
+			rec.CompletedAt = formatRFC3339(r.CompletedAt.Time)
+		}
+		rec.LLMProvider = r.LLMProvider
+		rec.LLMModel = r.LLMModel
+		rec.URLsByStatus = ins.URLsByStatus
+		rec.ClassificationsByLabel = ins.LabelCounts
+		rec.APICalls = ins.APICalls
+		rec.Retries = ins.Retries
+		rec.SuggestedAction = ins.NextActionMessage
+	}
+	b, err := json.Marshal(rec)
+	if err != nil {
+		// Marshal cannot realistically fail for this struct; degrade
+		// to an error record rather than panicking.
+		fmt.Fprintf(out, `{"kind":"run_inspection","error":%q}`+"\n", err.Error())
+		return
+	}
+	fmt.Fprintln(out, string(b))
+}
+
+func formatRFC3339(t time.Time) string {
+	if t.IsZero() {
+		return ""
+	}
+	return t.UTC().Format(time.RFC3339)
 }
 
 func formatTimeAgo(t time.Time) string {

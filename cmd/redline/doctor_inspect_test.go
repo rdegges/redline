@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"context"
 	"database/sql"
+	"encoding/json"
+	"errors"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -209,6 +211,110 @@ func TestInspectRun_LatestEmptyDB(t *testing.T) {
 	}
 	if !strings.Contains(ins.NextActionMessage, "No runs found") {
 		t.Errorf("NextActionMessage = %q, want 'No runs found'", ins.NextActionMessage)
+	}
+}
+
+func TestWriteRunInspectionJSON_ErrorCase(t *testing.T) {
+	var buf bytes.Buffer
+	writeRunInspectionJSON(&buf, nil, errors.New("open db: no such file"))
+	var rec runInspectionJSON
+	if err := json.Unmarshal(buf.Bytes(), &rec); err != nil {
+		t.Fatalf("unmarshal: %v\nGot: %s", err, buf.String())
+	}
+	if rec.Kind != "run_inspection" {
+		t.Errorf("kind = %q, want run_inspection", rec.Kind)
+	}
+	if !strings.Contains(rec.Error, "open db") {
+		t.Errorf("error = %q, want substring 'open db'", rec.Error)
+	}
+	if !strings.HasSuffix(buf.String(), "\n") {
+		t.Errorf("output not newline-terminated: %q", buf.String())
+	}
+}
+
+func TestWriteRunInspectionJSON_NoRunFound(t *testing.T) {
+	var buf bytes.Buffer
+	writeRunInspectionJSON(&buf, &runInspection{NextActionMessage: "Run \"abc\" not found in the database."}, nil)
+	var rec runInspectionJSON
+	if err := json.Unmarshal(buf.Bytes(), &rec); err != nil {
+		t.Fatalf("unmarshal: %v\nGot: %s", err, buf.String())
+	}
+	if rec.Kind != "run_inspection" {
+		t.Errorf("kind = %q, want run_inspection", rec.Kind)
+	}
+	if !strings.Contains(rec.Message, "not found") {
+		t.Errorf("message = %q, want substring 'not found'", rec.Message)
+	}
+	if rec.RunID != "" {
+		t.Errorf("run_id should be empty when no run found, got %q", rec.RunID)
+	}
+}
+
+func TestWriteRunInspectionJSON_WithRun(t *testing.T) {
+	var buf bytes.Buffer
+	started := time.Date(2026, 5, 14, 16, 23, 15, 0, time.UTC)
+	heartbeat := time.Date(2026, 5, 14, 16, 35, 11, 0, time.UTC)
+	completed := time.Date(2026, 5, 14, 17, 0, 0, 0, time.UTC)
+	r := &store.Run{
+		ID:              "01HXYZ",
+		SiteURL:         "https://example.com",
+		Status:          store.RunCompleted,
+		LLMProvider:     "ollama",
+		LLMModel:        "qwen3:30b",
+		StartedAt:       started,
+		LastHeartbeatAt: heartbeat,
+		CompletedAt:     sql.NullTime{Valid: true, Time: completed},
+	}
+	writeRunInspectionJSON(&buf, &runInspection{
+		Run:               r,
+		URLsByStatus:      map[string]int{"fetched": 12, "failed": 1},
+		LabelCounts:       map[string]int{"Aligned": 8, "Stale": 4},
+		APICalls:          15,
+		Retries:           2,
+		NextActionMessage: "Run is complete. Re-render the report at any time.",
+	}, nil)
+	var rec runInspectionJSON
+	if err := json.Unmarshal(buf.Bytes(), &rec); err != nil {
+		t.Fatalf("unmarshal: %v\nGot: %s", err, buf.String())
+	}
+	if rec.RunID != "01HXYZ" {
+		t.Errorf("run_id = %q, want 01HXYZ", rec.RunID)
+	}
+	if rec.Status != store.RunCompleted {
+		t.Errorf("status = %q, want %q", rec.Status, store.RunCompleted)
+	}
+	if rec.StartedAt != "2026-05-14T16:23:15Z" {
+		t.Errorf("started_at = %q, want RFC3339 UTC", rec.StartedAt)
+	}
+	if rec.CompletedAt != "2026-05-14T17:00:00Z" {
+		t.Errorf("completed_at = %q, want RFC3339 UTC", rec.CompletedAt)
+	}
+	if rec.LLMModel != "qwen3:30b" {
+		t.Errorf("llm_model = %q, want qwen3:30b", rec.LLMModel)
+	}
+	if rec.URLsByStatus["fetched"] != 12 || rec.URLsByStatus["failed"] != 1 {
+		t.Errorf("urls_by_status missing entries: %v", rec.URLsByStatus)
+	}
+	if rec.ClassificationsByLabel["Aligned"] != 8 {
+		t.Errorf("classifications_by_label.Aligned = %d, want 8", rec.ClassificationsByLabel["Aligned"])
+	}
+	if rec.APICalls != 15 || rec.Retries != 2 {
+		t.Errorf("counters wrong: api_calls=%d retries=%d", rec.APICalls, rec.Retries)
+	}
+	if !strings.Contains(rec.SuggestedAction, "Re-render the report") {
+		t.Errorf("suggested_action = %q", rec.SuggestedAction)
+	}
+}
+
+func TestWriteRunInspectionJSON_NilInspection(t *testing.T) {
+	var buf bytes.Buffer
+	writeRunInspectionJSON(&buf, nil, nil)
+	var rec runInspectionJSON
+	if err := json.Unmarshal(buf.Bytes(), &rec); err != nil {
+		t.Fatalf("unmarshal: %v\nGot: %s", err, buf.String())
+	}
+	if rec.Message == "" {
+		t.Errorf("expected fallback message for nil inspection, got empty")
 	}
 }
 
