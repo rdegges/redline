@@ -8,22 +8,30 @@ For installation and usage, see the [README](../README.md). For contribution mec
 
 ## The pipeline at a glance
 
-```
-┌─────────────┐    ┌──────────────┐    ┌────────────────┐    ┌──────────────┐    ┌────────────┐
-│   Crawler   │ -> │  Extractor   │ -> │   LLM Judge    │ -> │ Embed + Dedup│ -> │   Report   │
-│  (HTTP +    │    │ (HTML→text)  │    │  (Ollama local │    │ (Ollama local│    │  JSON + MD │
-│  sitemaps + │    │              │    │  by default;   │    │   by default;│    │  always;   │
-│  feeds +    │    │              │    │  Anthropic     │    │   OpenAI /   │    │  CSV       │
-│  BFS links) │    │              │    │  optional)     │    │   Voyage opt)│    │  opt-in    │
-└─────────────┘    └──────────────┘    └────────────────┘    └──────────────┘    └────────────┘
-        │                  │                    │                    │                  │
-        └──────────────────┴────── SQLite DB (state, resume, retries, audit) ────────────┘
-                                              ▲
-                                              │  every stage transition, every API call,
-                                              │  every error logged with full context
+```mermaid
+flowchart LR
+    Crawler["<b>Crawler</b><br/>HTTP + sitemaps<br/>+ feeds + BFS"]
+    Extractor["<b>Extractor</b><br/>HTML → text<br/>+ outbound links"]
+    Judge["<b>LLM Judge</b><br/>Ollama (default)<br/>or Anthropic"]
+    Embed["<b>Embed + Dedup</b><br/>Ollama (default)<br/>or OpenAI/Voyage"]
+    Report["<b>Report</b><br/>JSON + Markdown<br/>(CSV opt-in)"]
+    DB[("<b>SQLite DB</b><br/>state · resume<br/>retries · audit")]
+
+    Crawler --> Extractor --> Judge --> Embed --> Report
+
+    Crawler -. write .-> DB
+    Extractor -. write .-> DB
+    Judge -. write .-> DB
+    Embed -. write .-> DB
+    Report -. read .-> DB
+
+    classDef stage fill:#1f2937,stroke:#60a5fa,stroke-width:2px,color:#fff
+    classDef store fill:#0f172a,stroke:#fbbf24,stroke-width:2px,color:#fff
+    class Crawler,Extractor,Judge,Embed,Report stage
+    class DB store
 ```
 
-Every stage is **idempotent** with respect to the SQLite database: re-running a stage on the same DB does not duplicate work. Already-processed rows are skipped, and partially-completed work resumes from the last committed checkpoint.
+Every stage is **idempotent** with respect to the SQLite database: re-running a stage on the same DB does not duplicate work. Already-processed rows are skipped, and partially-completed work resumes from the last committed checkpoint. Every stage transition, every outbound API call, and every error is logged to the `events` table with full context for offline analysis.
 
 ---
 
