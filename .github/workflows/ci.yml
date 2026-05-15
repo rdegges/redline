@@ -28,13 +28,9 @@ jobs:
         run: go vet ./...
 
       - name: Lint
-        # Pinned to v6.5.0 — the last release of golangci-lint-action
-        # that supports golangci-lint v1.x. Our .golangci.yml is in the
-        # v1 config format; bumping the action to v7+ would require a
-        # full v2 config migration.
-        uses: golangci/golangci-lint-action@2226d7cb06a077cd73e56eedd38eecad18e5d837 # v6.5.0
+        uses: golangci/golangci-lint-action@1e7e51e771db61008b38414a730f564565cf7c20 # v9.2.0
         with:
-          version: v1.62
+          version: v2.12.2
 
       - name: Unit tests
         run: go test -race -count=1 ./...

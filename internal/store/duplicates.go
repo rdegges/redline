@@ -17,7 +17,7 @@ type DuplicatePair struct {
 // InsertDuplicate writes one duplicates row. Page URLs must satisfy
 // page_url_a < page_url_b (CHECK constraint).
 func (db *DB) InsertDuplicate(ctx context.Context, d DuplicatePair) error {
-	if !(d.PageURLA < d.PageURLB) {
+	if d.PageURLA >= d.PageURLB {
 		return fmt.Errorf("page_url_a must be lex < page_url_b: %q vs %q", d.PageURLA, d.PageURLB)
 	}
 	_, err := db.ExecContext(ctx, `

@@ -152,9 +152,7 @@ func (c *Crawler) discoverInitialURLs(ctx context.Context) error {
 func (c *Crawler) candidateSitemapURLs() []string {
 	out := []string{}
 	if c.Robots != nil {
-		for _, s := range c.Robots.Sitemaps {
-			out = append(out, s)
-		}
+		out = append(out, c.Robots.Sitemaps...)
 	}
 	out = append(out, SitemapURLs(c.BaseURL.Scheme+"://"+c.BaseURL.Host)...)
 	seen := map[string]bool{}

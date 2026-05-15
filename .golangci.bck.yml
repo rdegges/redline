@@ -1,0 +1,46 @@
+run:
+  timeout: 5m
+  tests: true
+
+linters:
+  disable-all: true
+  enable:
+    - errcheck
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    - gofmt
+    - misspell
+    - unconvert
+    - gosec
+
+issues:
+  exclude-dirs:
+    - testdata
+    - bin
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - errcheck
+        - unused
+        - gosec
+    # G304 (file inclusion via variable) — the prompts.yaml loader and
+    # the report writers both intentionally read/write user-supplied
+    # paths; that's the design.
+    - linters: [gosec]
+      text: "G304"
+    # G404 (weak RNG) — math/rand is used for retry-jitter only, never
+    # for any cryptographic context.
+    - linters: [gosec]
+      text: "G404"
+    # G115 (int->uint conversion) — exponential-backoff shift with a
+    # small bounded attempt counter (max-retries default 5). No real
+    # overflow risk.
+    - linters: [gosec]
+      text: "G115"
+    # G306 (WriteFile permissions) — reports are intentionally
+    # world-readable (0o644) so users can share them with teammates and
+    # downstream agents without chmod.
+    - linters: [gosec]
+      text: "G306"
