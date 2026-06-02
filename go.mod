@@ -10,7 +10,7 @@ require (
 	github.com/temoto/robotstxt v1.1.2
 	golang.org/x/time v0.15.0
 	gopkg.in/yaml.v3 v3.0.1
-	modernc.org/sqlite v1.50.1
+	modernc.org/sqlite v1.51.0
 )
 
 require (
