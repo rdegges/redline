@@ -8,6 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Security
+
+- Build with Go 1.27.4 (`go` directive in `go.mod`), which includes the fixes for Go standard library advisories GO-2026-6859 (`net/http` `MaxBytesReader` race) and GO-2026-6603. Go 1.25 is no longer supported upstream.
+- Bump `golang.org/x/net` to v0.62.0, fixing GO-2026-5942, GO-2026-6603, GO-2026-6610, GO-2026-6611, GO-2026-6612, GO-2026-6617, GO-2026-6860 and GO-2026-6866. GO-2026-6860 (quadratic HTML text-node coalescing) was reachable through `internal/extract` via `goquery`.
+
+### Changed
+
+- Update Go module dependencies, including `modernc.org/sqlite` v1.62.0 (SQLite 3.54.1), `goquery` v1.13.0, `cascadia` v1.3.5, `golang.org/x/sys` v0.50.0 and `golang.org/x/time` v0.16.0.
+- CI and release workflows: GitHub Actions pinned to commit SHAs on Node 24 runtimes, golangci-lint v2.15.0, govulncheck v1.9.0 and GoReleaser v2.20.0 pinned.
+
 ## [0.1.0-alpha] — 2026-05-14
 
 Initial public alpha release. Built from scratch under the working name `geo-prune` (May 2026); renamed to `redline` shortly before the public release.
