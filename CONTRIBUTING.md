@@ -19,9 +19,15 @@ If you only want to **report a bug** or **request a feature**, jump straight to 
 
 ### Prerequisites
 
-- **Go 1.24 or newer.** Recommended: install via [asdf](https://asdf-vm.com/) so you can match the version pinned in `.tool-versions`:
+- **Go 1.27.4 or newer.** This is the `go` directive in `go.mod`; CI reads it via `go-version-file`, so keep local and CI toolchains in sync. Recommended: install via [asdf](https://asdf-vm.com/):
   ```bash
-  asdf install golang $(cat .tool-versions | awk '/golang/ {print $2}')
+  asdf install golang 1.27.4
+  asdf set golang 1.27.4
+  ```
+- **golangci-lint v2.15.0 or newer** for `make lint` (CI pins v2.15.0). It must be built with Go 1.27 or newer to lint this module.
+- **govulncheck** for `make vuln` (CI pins `golang.org/x/vuln/cmd/govulncheck@v1.9.0`):
+  ```bash
+  go install golang.org/x/vuln/cmd/govulncheck@v1.9.0
   ```
 - **Ollama**, if you want to run the integration tests or hand-test end-to-end against a real LLM. Install from [ollama.com](https://ollama.com/) and run `ollama serve` in a separate terminal.
   ```bash
